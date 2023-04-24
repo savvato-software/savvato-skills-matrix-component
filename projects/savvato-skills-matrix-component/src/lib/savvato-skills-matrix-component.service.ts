@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { FunctionPromiseService } from '@savvato-software/savvato-javascript-services'
 
-import { TechProfileAPIService } from '@savvato-software/savvato-skills-matrix-services'
+import { SkillsMatrixAPIService } from '@savvato-software/savvato-skills-matrix-services'
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class SavvatoSkillsMatrixComponentService {
 
   env: any = undefined;
 
-  constructor(protected _skillsMatrixAPI: TechProfileAPIService,
+  constructor(protected _skillsMatrixAPI: SkillsMatrixAPIService,
     private _functionPromiseService: FunctionPromiseService) { }
 
   _init(env: any) {
