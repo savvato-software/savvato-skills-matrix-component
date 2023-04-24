@@ -1,0 +1,34 @@
+
+BUILDING A RELEASE
+---
+To build this project..
+
+    cd projects/savvato-skills-matrix-component/ && npm version patch && cd - && rm dist/ -rf && ng build savvato-skills-matrix-component && cd dist/savvato-skills-matrix-component/ && npm pack && cd - && date
+
+This will create a file, which you will have to refer to in the package.json of any other project that will make use of skills-matrix-component. Likely, this is already done for you. If you are just setting up your projects, don't worry about that. However, if you're reading this once you're comfortable with the code, and you've made a change to this repo, then you will need to know about this file, and that you may need to create a new version, and refer to that new version, in the other project. This is to avoid caching issues that prevent you from seeing your changes in the other project.
+
+The file will be named
+    ./savvato-skills-matrix-component/dist/savvato-skills-matrix-component/savvato-software-savvato-skills-matrix-component-0.0.?.tgz
+
+    INSTALL IN THE CLIENT PROJECT:
+      npm remove @savvato-software/skills-matrix-component
+      npm install ./savvato-skills-matrix-component/dist/savvato-skills-matrix-component/savvato-software-savvato-skills-matrix-component-0.0.?.tgz
+
+      Notice the question mark in the path, you'd replace it with your version number.
+
+----
+PUBLISHING A NEW VERSION
+
+    First login to npm with 'npm login'.
+    Run the command above to build the library.
+    From the root of the library, 'cd dist/skills-matrix-component && npm publish --dry-run'.
+    Be sure the output of the dry run is referring to the correct version and code you just built.
+    Run 'npm publish' when you are all sure.
+
+    If you mess up, just release another version. But don't mess up.
+
+
+Troubleshooting:
+    is the service you added to this library not available in your client?
+        - did you add it to public_api.ts?
+
