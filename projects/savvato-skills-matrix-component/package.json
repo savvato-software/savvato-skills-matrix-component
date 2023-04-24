@@ -1,6 +1,6 @@
 {
-  "name": "savvato-skills-matrix-component",
-  "version": "0.0.5",
+  "name": "@savvato-software/savvato-skills-matrix-component",
+  "version": "0.0.7",
   "peerDependencies": {
     "@angular/common": "^15.2.0",
     "@angular/core": "^15.2.0"
