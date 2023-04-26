@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { FunctionPromiseService } from '@savvato-software/savvato-javascript-services'
 
 import { SkillsMatrixAPIService } from '@savvato-software/savvato-skills-matrix-services'
+import {find} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -83,10 +84,10 @@ export class SavvatoSkillsMatrixComponentService {
 
     let model: any = this.getModel();
     if (model) {
-      let lineItem: any = model["topics"].flatMap(topic => topic["lineItems"]).find(item => item.id === lineItemId);
+      let lineItem: any = model["topics"].flatMap((topic: any) => topic["lineItems"]).find((item: any) => item.id === lineItemId);
 
       if (lineItem) {
-        rtn = lineItem["skills"].filter((s) => s["level"] === level).sort((a: any, b: any) => { return a["sequence"] - b["sequence"]; });
+        rtn = lineItem["skills"].filter((s: any) => s["level"] === level).sort((a: any, b: any) => { return a["sequence"] - b["sequence"]; });
       }
 
       return rtn;
