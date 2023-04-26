@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { FunctionPromiseService } from '@savvato-software/savvato-javascript-services'
 
 import { SkillsMatrixAPIService } from '@savvato-software/savvato-skills-matrix-services'
-import {find} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +19,7 @@ export class SavvatoSkillsMatrixComponentService {
 
     self._skillsMatrixAPI.setEnvironment(env);
 
-    self._functionPromiseService.initFunc("THE-TP", () => {
+    self._functionPromiseService.initFunc("THE-SM", () => {
       return new Promise((resolve, reject) => {
         self._skillsMatrixAPI.get(1).then((tp) => {
           resolve(tp);
@@ -30,18 +29,18 @@ export class SavvatoSkillsMatrixComponentService {
   }
 
   reset() {
-    this._functionPromiseService.reset("THE-TP");
+    this._functionPromiseService.reset("THE-SM");
   }
 
   waitingPromise() {
-    return this._functionPromiseService.waitAndGet("THE-TP", "THE-TP", { 'freshnessLengthInMillis': 60000 * 10 });
+    return this._functionPromiseService.waitAndGet("THE-SM", "THE-SM", { 'freshnessLengthInMillis': 60000 * 10 });
   }
 
   /** ** */
   /*    dtim-techprofile-component model service methods */
   /** ** */
   getModel() {
-    return this._functionPromiseService.get("THE-TP", "THE-TP", { 'freshnessLengthInMillis': 60000 * 10 });
+    return this._functionPromiseService.get("THE-SM", "THE-SM", { 'freshnessLengthInMillis': 60000 * 10 });
   }
 
   getName() {
