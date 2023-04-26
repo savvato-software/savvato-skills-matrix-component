@@ -38,7 +38,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
   expandedTopicIDs: Array<number> = [];
   expandedLineItemIDs: Array<number> = [];
 
-  tpsvc: any = undefined;
+  smmsvc: any = undefined;
 
   constructor(private injected_tpsvc: SavvatoSkillsMatrixComponentService) { }
 
@@ -65,12 +65,12 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
         if (ctrl.getSkillsMatrixModelService) {
           // write capable view, supplies its own skillsmatrixservice
-          self.tpsvc = ctrl.getSkillsMatrixModelService();
-          self.tpsvc._init(true /* force init */);
+          self.smmsvc = ctrl.getSkillsMatrixModelService();
+          self.smmsvc._init(true /* force init */);
 
           // set a callback to be called when skills matrix has changed (for instance, a line item deleted or added)
-          self.tpsvc.setResetCalculatedStuffCallback(() => {
-            let skillsMatrix = self.tpsvc.getModel();
+          self.smmsvc.setResetCalculatedStuffCallback(() => {
+            let skillsMatrix = self.smmsvc.getModel();
 
             if (skillsMatrix) {
               // get all getLineItems
@@ -85,35 +85,35 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
         } else {
           // read only view
-          self.tpsvc = self.injected_tpsvc;
-          self.tpsvc._init(ctrl.getEnv());
+          self.smmsvc = self.injected_tpsvc;
+          self.smmsvc._init(ctrl.getEnv());
 
           if (ctrl.setRefreshFunc) {
             // pass a function back to the client, one that it can call to let us know to refresh our data
             ctrl.setRefreshFunc(() => {
-              self.tpsvc.reset();
+              self.smmsvc.reset();
             })
           }
         }
 
         // wait for the skills matrix service to load, then.....
-        self.tpsvc.waitingPromise().then(() => {
+        self.smmsvc.waitingPromise().then(() => {
 
             let defaultFunctionDefinitionObj = {
                 getModel: () => {
-                  return self.tpsvc.getModel();
+                  return self.smmsvc.getModel();
                 },
                 getProfileName: () => {
-                  return self.tpsvc.getName();
+                  return self.smmsvc.getName();
                 },
                 getProfileTopics: () => {
-                  return self.tpsvc.getTopics();
+                  return self.smmsvc.getTopics();
                 },
                 getProfileLineItemsByTopic: (topic: any) => {
-                  return self.tpsvc.getLineItemsForATopic(topic['id']);
+                  return self.smmsvc.getLineItemsForATopic(topic['id']);
                 },
                 getSkillsByLineItemAndLevel: (lineItem: any, level: number) => {
-                  return self.tpsvc.getSkillsForALineItemAndLevel(lineItem['id'], level);
+                  return self.smmsvc.getSkillsForALineItemAndLevel(lineItem['id'], level);
                 },
                 _onTopicClick: (topic: any) => {
                   let thisId = topic['id'];
