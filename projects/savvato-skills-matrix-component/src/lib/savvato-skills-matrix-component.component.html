@@ -23,10 +23,18 @@
         <td colspan="9">{{lineItem.name}}</td>
       </tr>
       <tr class="skills-matrix-line-item-level" *ngIf="isFullDetailShowing(lineItem)">
-        <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 0)}" (click)="onLxDescriptionClick(lineItem, 0)"><span class="skills-matrix-line-item-level-element">{{lineItem.l0Description}}</span></td>
-        <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 1)}" (click)="onLxDescriptionClick(lineItem, 1)"><span class="skills-matrix-line-item-level-element">{{lineItem.l1Description}}</span></td>
-        <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 2)}" (click)="onLxDescriptionClick(lineItem, 2)"><span class="skills-matrix-line-item-level-element">{{lineItem.l2Description}}</span></td>
-        <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 3)}" (click)="onLxDescriptionClick(lineItem, 3)"><span class="skills-matrix-line-item-level-element">{{lineItem.l3Description}}</span></td>
+        <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 0)}" (click)="onLxClick(lineItem, 0)">
+          <span class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 0)">{{skill.description}}</span>
+        </td>
+        <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 1)}" (click)="onLxClick(lineItem, 1)">
+          <span class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 1)">{{skill.description}}</span>
+        </td>
+        <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 2)}" (click)="onLxClick(lineItem, 2)">
+          <span class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 2)">{{skill.description}}</span>
+        </td>
+        <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 3)}" (click)="onLxClick(lineItem, 3)">
+          <span class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 3)">{{skill.description}}</span>
+        </td>
       </tr>
     </table>
   </table>

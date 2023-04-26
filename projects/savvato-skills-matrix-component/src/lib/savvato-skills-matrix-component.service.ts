@@ -77,6 +77,21 @@ export class SavvatoSkillsMatrixComponentService {
 
     return rtn;
   }
+
+  getSkillsForALineItemAndLevel(lineItemId: number, level: number) {
+    let rtn: any = undefined;
+
+    let model: any = this.getModel();
+    if (model) {
+      let lineItem: any = model["topics"].flatMap(topic => topic["lineItems"]).find(item => item.id === lineItemId);
+
+      if (lineItem) {
+        rtn = lineItem["skills"].filter((s) => s["level"] === level).sort((a: any, b: any) => { return a["sequence"] - b["sequence"]; });
+      }
+
+      return rtn;
+    }
+  }
   /** ** */
 
 }

@@ -48,7 +48,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
         /*
           If our view of the skillsmatrix.component is one that can change its state,
-          for example, move its line items, or change the descriptive text of a cell,
+          for example, move its line items, or change the lineItem's skills perhaps,
           then that view needs to manage the state. This is because if something changes,
           its complicated to tell this component "hey something in my copy of the state changed.
           Now you update your copy." Its easier to just have this component be supplied a
@@ -57,7 +57,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
           This is where getSkillsMatrixModelService() on the controller is useful.
 
           If the view is read-only, like any other case that doesn't edit the skillsmatrix, then
-          you don't need to supply a techProfileModelService. In that case, the component
+          you don't need to supply a skillsMatrixModelService. In that case, the component
           will use its own default service. This keeps the client code simpler. You will need to
           supply an environment object, as the component will make a backend call, and needs to
           know which url to hit.
@@ -111,6 +111,9 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                 },
                 getProfileLineItemsByTopic: (topic: any) => {
                   return self.tpsvc.getLineItemsForATopic(topic['id']);
+                },
+                getSkillsByLineItemAndLevel: (lineItem: any, level: number) => {
+                  return self.tpsvc.getSkillsForALineItemAndLevel(lineItem['id'], level);
                 },
                 _onTopicClick: (topic: any) => {
                   let thisId = topic['id'];
@@ -213,8 +216,17 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
   }
 
   getProfileLineItemsByTopic(topic: any) {
+    // TODO: change this to getLineItemsByTopic
     if (this._controller && this.areLineItemHeadersShowing(topic) && this._controller["getProfileLineItemsByTopic"]) {
       return this._controller["getProfileLineItemsByTopic"](topic);
+    } else {
+      return [ ];
+    }
+  }
+
+  getSkills(lineItem: any, level: number) {
+    if (this._controller && this._controller["getSkillsByLineItemAndLevel"]) {
+      return this._controller["getSkillsByLineItemAndLevel"](lineItem, level);
     } else {
       return [ ];
     }
@@ -252,9 +264,9 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     }
   }
 
-  onLxDescriptionClick(lineItem: any, idx: number) {
-    if (this._controller && this._controller["onLxDescriptionClick"]) {
-      return this._controller["onLxDescriptionClick"](lineItem, idx);
+  onLxClick(lineItem: any, idx: number) {
+    if (this._controller && this._controller["onLxClick"]) {
+      return this._controller["onLxClick"](lineItem, idx);
     }
   }
 
