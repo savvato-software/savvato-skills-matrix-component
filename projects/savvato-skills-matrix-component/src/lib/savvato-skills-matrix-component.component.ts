@@ -1,6 +1,6 @@
 import { Component, OnInit, Injectable, Input } from '@angular/core';
 
-import {SavvatoSkillsMatrixComponentService} from "./savvato-skills-matrix-component.service";
+import { ReadOnlySkillsMatrixModelService as DefaultSkillsMatrixModelService } from '@savvato-software/savvato-skills-matrix-services';
 
 import * as jp from 'jsonpath';
 
@@ -34,13 +34,14 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
   selectedTopicIDs: Array<number> = [];
   selectedLineItemIDs: Array<number> = [];
+  selectedSkillIDs: Array<number> = [];
 
   expandedTopicIDs: Array<number> = [];
   expandedLineItemIDs: Array<number> = [];
 
   smmsvc: any = undefined;
 
-  constructor(private injected_tpsvc: SavvatoSkillsMatrixComponentService) { }
+  constructor(private defaultSMMSvc: DefaultSkillsMatrixModelService) { }
 
   ngOnInit() {
     let self = this;
@@ -50,51 +51,22 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
           If our view of the skillsmatrix.component is one that can change its state,
           for example, move its line items, or change the lineItem's skills perhaps,
           then that view needs to manage the state. This is because if something changes,
-          its complicated to tell this component "hey something in my copy of the state changed.
-          Now you update your copy." Its easier to just have this component be supplied a
+          it is complicated to tell this component "hey something in my copy of the state changed.
+          Now you update your copy." It is easier to just have this component be supplied a
           copy of the state.
 
           This is where getSkillsMatrixModelService() on the controller is useful.
 
-          If the view is read-only, like any other case that doesn't edit the skillsmatrix, then
+          If the view is read-only, as in any case that doesn't edit the skillsmatrix, then
           you don't need to supply a skillsMatrixModelService. In that case, the component
           will use its own default service. This keeps the client code simpler. You will need to
           supply an environment object, as the component will make a backend call, and needs to
           know which url to hit.
         */
 
-        if (ctrl.getSkillsMatrixModelService) {
-          // write capable view, supplies its own skillsmatrixservice
-          self.smmsvc = ctrl.getSkillsMatrixModelService();
-          self.smmsvc._init(true /* force init */);
-
-          // set a callback to be called when skills matrix has changed (for instance, a line item deleted or added)
-          self.smmsvc.setResetCalculatedStuffCallback(() => {
-            let skillsMatrix = self.smmsvc.getModel();
-
-            if (skillsMatrix) {
-              // get all getLineItems
-              let allLineItemIds: any = jp.query(skillsMatrix, "$..lineItems");
-              allLineItemIds = allLineItemIds.flat();
-              allLineItemIds = allLineItemIds.map((li: any) => li['id']);
-
-              // if there is any selected line item id, which does not appear in the list of all line items, remove it
-              self.selectedLineItemIDs = self.selectedLineItemIDs.filter(id => allLineItemIds.includes(id))
-            }
-          })
-
-        } else {
-          // read only view
-          self.smmsvc = self.injected_tpsvc;
-          self.smmsvc._init(ctrl.getEnv());
-
-          if (ctrl.setRefreshFunc) {
-            // pass a function back to the client, one that it can call to let us know to refresh our data
-            ctrl.setRefreshFunc(() => {
-              self.smmsvc.reset();
-            })
-          }
-        }
+        (ctrl.getSkillsMatrixModelService) ?
+          this.initModelForPotentialUpdates(self, ctrl)
+          : this.initModelForReadOnly(self, ctrl);
 
         // wait for the skills matrix service to load, then.....
         self.smmsvc.waitingPromise().then(() => {
@@ -187,8 +159,49 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                 return self.selectedLineItemIDs.slice(0) // return a copy of the array
               });
             }
+            if ( self._controller["setProviderForSelectedSkillIDs"]) {
+              self._controller["setProviderForSelectedSkillIDs"](() => {
+                return self.selectedSkillIDs.slice(0);
+              })
+            }
         });
       });
+  }
+
+  private initModelForPotentialUpdates(self: this, ctrl: any) {
+    // write capable view, supplies its own skillsmatrixservice
+    self.smmsvc = ctrl.getSkillsMatrixModelService();
+    self.smmsvc._init(true /* force init */);
+
+    // set a callback to be called when skills matrix has changed (for instance, a line item deleted or added)
+    self.smmsvc.setResetCalculatedStuffCallback(() => {
+      let skillsMatrix = self.smmsvc.getModel();
+
+      if (skillsMatrix) {
+        // get all getLineItems
+        let allLineItemIds: any = jp.query(skillsMatrix, "$..lineItems");
+        allLineItemIds = allLineItemIds.flat();
+        allLineItemIds = allLineItemIds.map((li: any) => li['id']);
+
+        // if there is any selected line item id, which does not appear in the list of all line items, remove it
+        self.selectedLineItemIDs = self.selectedLineItemIDs.filter(id => allLineItemIds.includes(id))
+      }
+    })
+  }
+
+  private initModelForReadOnly(self: this, ctrl: any) {
+    // read only view
+    self.smmsvc = self.defaultSMMSvc;
+
+    self.smmsvc.setEnvironment(ctrl.getEnv());
+    self.smmsvc._init();
+
+    if (ctrl.setRefreshFunc) {
+      // pass a function back to the client, one that it can call to let us know to refresh our data
+      ctrl.setRefreshFunc(() => {
+        self.smmsvc.reset();
+      })
+    }
   }
 
   isButtonBarShowing() {
@@ -344,5 +357,4 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
     return this.collapseToState === this._STATE_FULL_DETAIL;
   }
-
 }
