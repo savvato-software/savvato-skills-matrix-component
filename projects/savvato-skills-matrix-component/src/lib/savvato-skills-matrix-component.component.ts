@@ -134,8 +134,9 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                     isSelected = true;
                   } else {
                     if (self.allowMultiSelect) {
-                      if (self.selectedLineItemIDs.find((thatId) => { return thisId === thatId; })) {
+                      if (self.selectedLineItemIDs.includes(thisId)) {
                         self.selectedLineItemIDs = self.selectedLineItemIDs.filter((thatId) => { return thisId !== thatId; })
+                        // TODO handle 'clearing the skill level for this line item' logic
                         isSelected = false;
                       } else {
                         self.selectedLineItemIDs.push(thisId);
@@ -149,17 +150,34 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                         self.selectedLineItemIDs[0] = thisId;
                         isSelected = true;
                       }
+
+                      self.selectedSkillLevelID = -1;
                     }
                   }
 
                   return isSelected;
                 },
                 _onLxClick: (lineItem: any, level: number) => {
-                  if (self.selectedSkillLevelID === level) {
-                    self.selectedSkillLevelID = -1;
-                  } else {
-                    self.selectedSkillLevelID = level;
+                  let isSelected = false;
+                  let thisLineItemId = lineItem['id'];
+
+                  if (self.selectedLineItemIDs.length > 0) {
+                    if (self.allowMultiSelect) {
+                      if (self.selectedLineItemIDs.includes(thisLineItemId)) {
+                        // TODO implement
+                      }
+                    } else {
+                      if (self.selectedLineItemIDs[0] === thisLineItemId) {
+                        if (self.selectedSkillLevelID === level)
+                          self.selectedSkillLevelID = -1;
+                        else
+                          self.selectedSkillLevelID = level;
+                          isSelected = true;
+                      }
+                    }
                   }
+
+                  return isSelected;
                 }
             }
 
@@ -284,9 +302,12 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     }
   }
 
-  getSkillBackgroundColor(skill: any) {
+  getSkillBackgroundColor(lineItem: any, skill: any) {
     if (this._controller && this._controller["getSkillBackgroundColor"]) {
-      return this._controller["getSkillBackgroundColor"](skill, this.selectedSkillLevelID === skill.level);
+      const isLineItemSelected = this.selectedLineItemIDs.includes(lineItem['id']);
+      const isThisSkillsLevelSelected = this.selectedSkillLevelID === skill["level"];
+
+      return this._controller["getSkillBackgroundColor"](lineItem, skill, isLineItemSelected && isThisSkillsLevelSelected);
     } else {
       return "white";
     }
