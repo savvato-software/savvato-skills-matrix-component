@@ -17,6 +17,16 @@ import * as jp from 'jsonpath';
 //  some user action. The ctrl object overrides those functions to provide the custom behavior. If a containing
 //  component does not need that behavior, it does not override the method.
 
+// The SM component uses a controller object, provided by the component which references the SM component in its template.
+//  this controller object
+//    - contains methods which provide the data for the SM: its topics, line items, etc.
+//    - contains handlers for what happens when you click on an element in the SM. By default, these implement the
+//      selecting behavior: selecting a topic, selecting a line item, etc.
+//    - contains setter functions which allow the SM component to call the containing component and pass it a list of
+//      the IDs of the selected components.
+
+
+
 @Injectable({
     providedIn: 'root'
 })
@@ -34,7 +44,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
   selectedTopicIDs: Array<number> = [];
   selectedLineItemIDs: Array<number> = [];
-  selectedSkillIDs: Array<number> = [];
+  selectedSkillLevel: number = -1;
 
   expandedTopicIDs: Array<number> = [];
   expandedLineItemIDs: Array<number> = [];
@@ -71,7 +81,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
         // wait for the skills matrix service to load, then.....
         self.smmsvc.waitingPromise().then(() => {
 
-            let defaultFunctionDefinitionObj = {
+            let defaultController = {
                 getModel: () => {
                   return self.smmsvc.getModel();
                 },
@@ -143,10 +153,17 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                   }
 
                   return isSelected;
+                },
+                _onLxClick: (lineItem: any, level: number) => {
+                  if (self.selectedSkillLevel === level) {
+                    self.selectedSkillLevel = -1;
+                  } else {
+                    self.selectedSkillLevel = level;
+                  }
                 }
             }
 
-            self._controller = { ...defaultFunctionDefinitionObj, ...ctrl };
+            self._controller = { ...defaultController, ...ctrl };
 
             // handle inits and provider funcs for the client..
             if ( self._controller["setProviderForSelectedTopicIDs"]) {
@@ -159,11 +176,12 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                 return self.selectedLineItemIDs.slice(0) // return a copy of the array
               });
             }
-            if ( self._controller["setProviderForSelectedSkillIDs"]) {
-              self._controller["setProviderForSelectedSkillIDs"](() => {
-                return self.selectedSkillIDs.slice(0);
-              })
-            }
+
+            // Note, no need for a setProviderForSelectedSkillIDs because
+            //  you can't select individual skills from the component. You
+            //  select a skill level, and then the page doing the selecting
+            //  will have a means of editing the skills that apply to that
+            //  level.
         });
       });
   }
@@ -261,6 +279,14 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     }
   }
 
+  getSkillBackgroundColor(skill: any) {
+    if (this._controller && this._controller["getSkillBackgroundColor"]) {
+      return this._controller["getSkillBackgroundColor"](skill, this.selectedSkillLevel === skill.level);
+    } else {
+      return "white";
+    }
+  }
+
   getLineItemBackgroundColor(lineItem: any) {
     if (this._controller && this._controller["getLineItemBackgroundColor"]) {
       return this._controller["getLineItemBackgroundColor"](lineItem, this.selectedLineItemIDs.includes(lineItem['id']), !this.isFullDetailShowing(lineItem));
@@ -278,8 +304,8 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
   }
 
   onLxClick(lineItem: any, idx: number) {
-    if (this._controller && this._controller["onLxClick"]) {
-      return this._controller["onLxClick"](lineItem, idx);
+    if (this._controller && this._controller["_onLxClick"]) {
+      return this._controller["_onLxClick"](lineItem, idx);
     }
   }
 

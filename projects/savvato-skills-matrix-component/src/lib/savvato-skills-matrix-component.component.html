@@ -24,16 +24,24 @@
       </tr>
       <tr class="skills-matrix-line-item-level" *ngIf="isFullDetailShowing(lineItem)">
         <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 1)}" (click)="onLxClick(lineItem, 1)">
-          <span class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 1).slice(0,3)">{{skill.description}}<br/></span>
+          <span class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 1).slice(0,3)">
+            <span [ngStyle]="{'background-color':getSkillBackgroundColor(skill)}">{{skill.description}}<br/></span>
+          </span>
         </td>
         <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 2)}" (click)="onLxClick(lineItem, 2)">
-          <span class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 2).slice(0,3)">{{skill.description}}<br/></span>
+          <span class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 2).slice(0,3)">
+            <span [ngStyle]="{'background-color':getSkillBackgroundColor(skill)}">{{skill.description}}<br/></span>
+          </span>
         </td>
         <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 3)}" (click)="onLxClick(lineItem, 3)">
-          <span class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 3).slice(0,3)">{{skill.description}}<br/></span>
+          <span class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 3).slice(0,3)">
+            <span [ngStyle]="{'background-color':getSkillBackgroundColor(skill)}">{{skill.description}}<br/></span>
+          </span>
         </td>
         <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 4)}" (click)="onLxClick(lineItem, 4)">
-          <span class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 4).slice(0,3)">{{skill.description}}<br/></span>
+          <span class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 4).slice(0,3)">
+            <span [ngStyle]="{'background-color':getSkillBackgroundColor(skill)}">{{skill.description}}<br/></span>
+          </span>
         </td>
       </tr>
     </table>
