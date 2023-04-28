@@ -44,7 +44,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
   selectedTopicIDs: Array<number> = [];
   selectedLineItemIDs: Array<number> = [];
-  selectedSkillLevel: number = -1;
+  selectedSkillLevelID: number = -1;
 
   expandedTopicIDs: Array<number> = [];
   expandedLineItemIDs: Array<number> = [];
@@ -155,10 +155,10 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                   return isSelected;
                 },
                 _onLxClick: (lineItem: any, level: number) => {
-                  if (self.selectedSkillLevel === level) {
-                    self.selectedSkillLevel = -1;
+                  if (self.selectedSkillLevelID === level) {
+                    self.selectedSkillLevelID = -1;
                   } else {
-                    self.selectedSkillLevel = level;
+                    self.selectedSkillLevelID = level;
                   }
                 }
             }
@@ -175,6 +175,11 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
               self._controller["setProviderForSelectedLineItemIDs"](() => {
                 return self.selectedLineItemIDs.slice(0) // return a copy of the array
               });
+            }
+            if ( self._controller["setProviderForSelectedLevelID"]) {
+              self._controller["setProviderForSelectedLevelID"](() => {
+                return self.selectedSkillLevelID;
+              })
             }
 
             // Note, no need for a setProviderForSelectedSkillIDs because
@@ -281,7 +286,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
   getSkillBackgroundColor(skill: any) {
     if (this._controller && this._controller["getSkillBackgroundColor"]) {
-      return this._controller["getSkillBackgroundColor"](skill, this.selectedSkillLevel === skill.level);
+      return this._controller["getSkillBackgroundColor"](skill, this.selectedSkillLevelID === skill.level);
     } else {
       return "white";
     }
