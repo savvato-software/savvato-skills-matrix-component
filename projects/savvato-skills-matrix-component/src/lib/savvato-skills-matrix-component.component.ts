@@ -240,7 +240,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     if (ctrl.setRefreshFunc) {
       // pass a function back to the client, one that it can call to let us know to refresh our data
       ctrl.setRefreshFunc(() => {
-        self.smmsvc.reset();
+        self.smmsvc.waitingPromise().then(() => self.smmsvc.reset())
       })
     }
   }
