@@ -74,6 +74,11 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
           know which url to hit.
         */
 
+        let skillsMatrixId: number = ctrl.getSkillsMatrixId();
+
+        if (isNaN(skillsMatrixId) || skillsMatrixId < 1)
+          throw new Error("The skillsMatrixId provided by the controllers getSkillsMatrixId() method was invalid.");
+
         (ctrl.getSkillsMatrixModelService) ?
           this.initModelForPotentialUpdates(self, ctrl)
           : this.initModelForReadOnly(self, ctrl);
@@ -212,7 +217,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
   private initModelForPotentialUpdates(self: this, ctrl: any) {
     // write capable view, supplies its own skillsmatrixservice
     self.smmsvc = ctrl.getSkillsMatrixModelService();
-    self.smmsvc._init(true /* force init */);
+    self.smmsvc._init(ctrl.getSkillsMatrixId(), true /* force init */);
 
     // set a callback to be called when skills matrix has changed (for instance, a line item deleted or added)
     self.smmsvc.setResetCalculatedStuffCallback(() => {
@@ -235,7 +240,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     self.smmsvc = self.defaultSMMSvc;
 
     self.smmsvc.setEnvironment(ctrl.getEnv());
-    self.smmsvc._init();
+    self.smmsvc._init(ctrl.getSkillsMatrixId());
 
     if (ctrl.setRefreshFunc) {
       // pass a function back to the client, one that it can call to let us know to refresh our data
