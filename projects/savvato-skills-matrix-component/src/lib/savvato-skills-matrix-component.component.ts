@@ -244,7 +244,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     self.smmsvc = self.defaultSMMSvc;
 
     self.smmsvc.setEnvironment(ctrl.getEnv());
-    self.smmsvc._init(ctrl.getSkillsMatrixId());
+    self.smmsvc._init(ctrl.getSkillsMatrixId(), true);
 
     if (ctrl.setRefreshFunc) {
       // pass a function back to the client, one that it can call to let us know to refresh our data
