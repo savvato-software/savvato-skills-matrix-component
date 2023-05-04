@@ -311,14 +311,17 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     }
   }
 
-  getSkillBackgroundColor(lineItem: any, skill: any) {
+  getSkillBackgroundColor(lineItem: any, skill: any, index: number) {
     if (this._controller && this._controller["getSkillBackgroundColor"]) {
       const isLineItemSelected = this.selectedLineItemIDs.includes(lineItem['id']);
       const isThisSkillsLevelSelected = this.selectedSkillLevelID === skill["level"];
 
-      return this._controller["getSkillBackgroundColor"](lineItem, skill, isLineItemSelected && isThisSkillsLevelSelected);
+      return this._controller["getSkillBackgroundColor"](lineItem, skill, index, isLineItemSelected && isThisSkillsLevelSelected);
     } else {
-      return "white";
+      if (index % 2 == 0)
+        return "white";
+      else
+        return "lightgray";
     }
   }
 
