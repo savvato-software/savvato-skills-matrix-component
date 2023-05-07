@@ -18,8 +18,8 @@
     "@angular/platform-browser": "^16.0.0",
     "@angular/platform-browser-dynamic": "^16.0.0",
     "@angular/router": "^16.0.0",
-    "@savvato-software/savvato-javascript-services": "file:../savvato-javascript-services/dist/savvato-javascript-services/savvato-software-savvato-javascript-services-0.0.30.tgz",
-    "@savvato-software/savvato-skills-matrix-services": "file:../savvato-skills-matrix-services/dist/savvato-skills-matrix-services/savvato-software-savvato-skills-matrix-services-0.0.17.tgz",
+    "@savvato-software/savvato-javascript-services": "^0.0.33",
+    "@savvato-software/savvato-skills-matrix-services": "^0.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
