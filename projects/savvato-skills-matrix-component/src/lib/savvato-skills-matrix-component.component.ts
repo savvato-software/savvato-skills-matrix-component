@@ -90,13 +90,13 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                 getModel: () => {
                   return self.smmsvc.getModel();
                 },
-                getProfileName: () => {
+                getName: () => {
                   return self.smmsvc.getName();
                 },
-                getProfileTopics: () => {
+                getTopics: () => {
                   return self.smmsvc.getTopics();
                 },
-                getProfileLineItemsByTopic: (topic: any) => {
+                getLineItemsByTopic: (topic: any) => {
                   return self.smmsvc.getLineItemsForATopic(topic['id']);
                 },
                 getSkillsByLineItemAndLevel: (lineItem: any, level: number) => {
@@ -262,26 +262,25 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     }
   }
 
-  getProfileName() {
-    if (this._controller && this._controller["getProfileName"]) {
-      return this._controller["getProfileName"]();
+  getName() {
+    if (this._controller && this._controller["getName"]) {
+      return this._controller["getName"]();
     } else {
       return "";
     }
   }
 
-  getProfileTopics() {
-    if (this._controller && this._controller["getProfileTopics"]) {
-      return this._controller["getProfileTopics"]();
+ getTopics() {
+    if (this._controller && this._controller["getTopics"]) {
+      return this._controller["getTopics"]();
     } else {
       return [ ];
     }
   }
 
-  getProfileLineItemsByTopic(topic: any) {
-    // TODO: change this to getLineItemsByTopic
-    if (this._controller && this.areLineItemHeadersShowing(topic) && this._controller["getProfileLineItemsByTopic"]) {
-      return this._controller["getProfileLineItemsByTopic"](topic);
+  getLineItemsByTopic(topic: any) {
+    if (this._controller && this.areLineItemHeadersShowing(topic) && this._controller["getLineItemsByTopic"]) {
+      return this._controller["getLineItemsByTopic"](topic);
     } else {
       return [ ];
     }

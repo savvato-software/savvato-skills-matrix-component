@@ -1,6 +1,6 @@
 <table class="skills-matrix-table" *ngIf="_controller">
   <tr class="skills-matrix-title">
-    <div>{{getProfileName()}}</div>
+    <div>{{getName()}}</div>
   </tr>
   <tr class="skills-matrix-color-meaning-string">
     <div>{{getColorMeaningString()}}</div>
@@ -14,11 +14,11 @@
       <button (click)="onExpandLineItemBtnClick()">Expand Line Item</button>
     </div>
   </tr>
-  <table class="skills-matrix-topic-level" *ngFor="let topic of getProfileTopics()">
+  <table class="skills-matrix-topic-level" *ngFor="let topic of getTopics()">
     <tr class="skills-matrix-topic" [ngStyle]="{'background-color':getTopicBackgroundColor(topic)}" (click)="onTopicNameClick(topic)">
       <div>{{topic.name}}</div>
     </tr>
-    <table class="lineItemTable" *ngFor="let lineItem of getProfileLineItemsByTopic(topic)">
+    <table class="lineItemTable" *ngFor="let lineItem of getLineItemsByTopic(topic)">
       <tr class="skills-matrix-line-item-level-header" [ngStyle]="{'background-color':getLineItemBackgroundColor(lineItem)}" (click)="onLineItemNameClick(lineItem)">
         <td colspan="9">{{lineItem.name}}</td>
       </tr>
