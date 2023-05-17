@@ -74,9 +74,9 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
           know which url to hit.
         */
 
-        let skillsMatrixId: number = ctrl.getSkillsMatrixId();
+        let skillsMatrixId: string = ctrl.getSkillsMatrixId();
 
-        if (isNaN(skillsMatrixId) || skillsMatrixId < 1)
+        if (skillsMatrixId === undefined || skillsMatrixId === null || skillsMatrixId === "" || skillsMatrixId.length !== 12)
           throw new Error("The skillsMatrixId provided by the controllers getSkillsMatrixId() method was invalid.");
 
         (ctrl.getSkillsMatrixModelService) ?
