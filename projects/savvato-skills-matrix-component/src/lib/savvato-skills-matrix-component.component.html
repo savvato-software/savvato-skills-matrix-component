@@ -7,11 +7,11 @@
   </tr>
   <tr *ngIf="isButtonBarShowing()">
     <div class="buttonBarDiv">
-      <button (click)="onTopicsOnlyBtnClick()">Topics Only</button>
-      <button (click)="onTopicsAndHeadersBtnClick()">Topics & Skills</button>
-      <button (click)="onTopicsHeadersAndDetailBtnClick()">Full Detail</button>
-      <button (click)="onExpandTopicBtnClick()">Expand Topic</button>
-      <button (click)="onExpandLineItemBtnClick()">Expand Line Item</button>
+      <button (click)="onTopicsOnlyBtnClick()" [disabled]="!isCollapseToTopicsBtnEnabled()">Collapse To Topics</button> |
+      <button (click)="onTopicsAndHeadersBtnClick()" [disabled]="!isCollapsToTopicsAndLineItemsBtnEnabled()">Collapse To Line Items</button> |
+      <button (click)="onTopicsHeadersAndDetailBtnClick()" [disabled]="!isFullDetailBtnEnabled()">Full Detail</button> ||
+      <button (click)="onExpandTopicBtnClick()" [disabled]="!isExpandCollapseTopicBtnEnabled()">{{getExpandCollapseTopicBtnText()}}</button> |
+      <button (click)="onExpandLineItemBtnClick()" [disabled]="!isExpandCollapseLineItemBtnEnabled()">{{getExpandCollapseLineItemBtnText()}}</button>
     </div>
   </tr>
   <table class="skills-matrix-topic-level" *ngFor="let topic of getTopics()">

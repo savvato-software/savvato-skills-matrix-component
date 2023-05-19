@@ -42,12 +42,12 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
   _controller: any = undefined;
 
-  selectedTopicIDs: Array<number> = [];
-  selectedLineItemIDs: Array<number> = [];
-  selectedSkillLevelID: number = -1;
+  selectedTopicIDs: Array<string> = [];
+  selectedLineItemIDs: Array<string> = [];
+  selectedSkillLevel: number = -1;
 
-  expandedTopicIDs: Array<number> = [];
-  expandedLineItemIDs: Array<number> = [];
+  expandedTopicIDs: Array<string> = [];
+  expandedLineItemIDs: Array<string> = [];
 
   smmsvc: any = undefined;
 
@@ -156,7 +156,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                         isSelected = true;
                       }
 
-                      self.selectedSkillLevelID = -1;
+                      self.selectedSkillLevel = -1;
                     }
                   }
 
@@ -173,10 +173,10 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                       }
                     } else {
                       if (self.selectedLineItemIDs[0] === thisLineItemId) {
-                        if (self.selectedSkillLevelID === level)
-                          self.selectedSkillLevelID = -1;
+                        if (self.selectedSkillLevel === level)
+                          self.selectedSkillLevel = -1;
                         else
-                          self.selectedSkillLevelID = level;
+                          self.selectedSkillLevel = level;
                           isSelected = true;
                       }
                     }
@@ -201,7 +201,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
             }
             if ( self._controller["setProviderForSelectedLevelID"]) {
               self._controller["setProviderForSelectedLevelID"](() => {
-                return self.selectedSkillLevelID;
+                return self.selectedSkillLevel;
               })
             }
 
@@ -313,7 +313,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
   getSkillBackgroundColor(lineItem: any, skill: any, index: number) {
     if (this._controller && this._controller["getSkillBackgroundColor"]) {
       const isLineItemSelected = this.selectedLineItemIDs.includes(lineItem['id']);
-      const isThisSkillsLevelSelected = this.selectedSkillLevelID === skill["level"];
+      const isThisSkillsLevelSelected = this.selectedSkillLevel === skill["level"];
 
       return this._controller["getSkillBackgroundColor"](lineItem, skill, index, isLineItemSelected && isThisSkillsLevelSelected);
     } else {
@@ -386,6 +386,48 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
         this.expandedTopicIDs.push(currSelectedId)
       }
     }
+  }
+
+  isFullDetailBtnEnabled() {
+    return this.collapseToState != this._STATE_FULL_DETAIL;
+  }
+
+  isCollapseToTopicsBtnEnabled() {
+    return this.collapseToState != this._STATE_TOPICS_ONLY;
+  }
+
+  isCollapsToTopicsAndLineItemsBtnEnabled() {
+    return this.collapseToState != this._STATE_TOPICS_HEADERS;
+  }
+
+  getExpandCollapseTopicBtnText() {
+    let text = "Mark as Expanded Topic";
+
+    // if the selected topic id is in the expanded list, then we want to show the collapse text
+    if (this.expandedTopicIDs.includes(this.selectedTopicIDs[0])) {
+      text = "Mark as Collapsed Topic";
+    }
+
+    return text;
+  }
+
+  isExpandCollapseTopicBtnEnabled() {
+    return this.collapseToState == this._STATE_TOPICS_ONLY && this.selectedTopicIDs.length > 0;
+  }
+
+  getExpandCollapseLineItemBtnText() {
+    let text = "Mark as Expanded LI";
+
+    // if the selected line item id is in the expanded list, then we want to show the collapse text
+    if (this.expandedLineItemIDs.includes(this.selectedLineItemIDs[0])) {
+      text = "Mark as Collapsed LI";
+    }
+
+    return text;
+  }
+
+  isExpandCollapseLineItemBtnEnabled() {
+    return this.collapseToState == this._STATE_TOPICS_HEADERS && this.selectedLineItemIDs.length > 0;
   }
 
   _STATE_TOPICS_ONLY = 'topicsOnly'
