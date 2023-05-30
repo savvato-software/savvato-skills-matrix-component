@@ -79,18 +79,15 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
         if (skillsMatrixId === undefined || skillsMatrixId === null || skillsMatrixId === "" || skillsMatrixId.length !== 12)
           throw new Error("The skillsMatrixId provided by the controllers getSkillsMatrixId() method was invalid.");
 
-        (ctrl.getSkillsMatrixModelService) ?
-          this.initModelForPotentialUpdates(self, ctrl)
-          : this.initModelForReadOnly(self, ctrl);
+        (ctrl.isEditor && ctrl.isEditor()) ?
+          this.initModelForEditing(self, ctrl)
+          : this.initModelForDisplaying(self, ctrl);
 
         // wait for the skills matrix service to load, then.....
         self.smmsvc.waitingPromise().then(() => {
 
             let defaultController = {
-                getModel: () => {
-                  return self.smmsvc.getModel();
-                },
-                getName: () => {
+                getName: (skillsMatrixId) => {
                   return self.smmsvc.getName();
                 },
                 getTopics: () => {
@@ -218,10 +215,10 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
       });
   }
 
-  private initModelForPotentialUpdates(self: this, ctrl: any) {
+  private initModelForEditing(self: this, ctrl: any) {
     // write capable view, supplies its own skillsmatrixservice
     self.smmsvc = ctrl.getSkillsMatrixModelService();
-    self.smmsvc._init(ctrl.getSkillsMatrixId(), true /* force init */);
+    self.smmsvc._initAll(ctrl.getAllSkillsMatrixIds(), true /* force init */);
 
     // set a callback to be called when skills matrix has changed (for instance, a line item deleted or added)
     self.smmsvc.setResetCalculatedStuffCallback(() => {
@@ -239,7 +236,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     })
   }
 
-  private initModelForReadOnly(self: this, ctrl: any) {
+  private initModelForDisplaying(self: this, ctrl: any) {
     // read only view
     self.smmsvc = self.defaultSMMSvc;
 
