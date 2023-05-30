@@ -1,51 +1,53 @@
-<table class="skills-matrix-table" *ngIf="_controller">
-  <tr class="skills-matrix-title">
-    <div>{{getName()}}</div>
-  </tr>
-  <tr class="skills-matrix-color-meaning-string">
-    <div>{{getColorMeaningString()}}</div>
-  </tr>
-  <tr *ngIf="isButtonBarShowing()">
-    <div class="buttonBarDiv">
-      <button (click)="onTopicsOnlyBtnClick()" [disabled]="!isCollapseToTopicsBtnEnabled()">Collapse To Topics</button> |
-      <button (click)="onTopicsAndHeadersBtnClick()" [disabled]="!isCollapsToTopicsAndLineItemsBtnEnabled()">Collapse To Line Items</button> |
-      <button (click)="onTopicsHeadersAndDetailBtnClick()" [disabled]="!isFullDetailBtnEnabled()">Full Detail</button> ||
-      <button (click)="onExpandTopicBtnClick()" [disabled]="!isExpandCollapseTopicBtnEnabled()">{{getExpandCollapseTopicBtnText()}}</button> |
-      <button (click)="onExpandLineItemBtnClick()" [disabled]="!isExpandCollapseLineItemBtnEnabled()">{{getExpandCollapseLineItemBtnText()}}</button>
-    </div>
-  </tr>
-  <table class="skills-matrix-topic-level" *ngFor="let topic of getTopics()">
-    <tr class="skills-matrix-topic" [ngStyle]="{'background-color':getTopicBackgroundColor(topic)}" (click)="onTopicNameClick(topic)">
-      <div>{{topic.name}}</div>
+<div *ngIf="_controller">
+  <table class="skills-matrix-table" *ngFor="let matrix of getSkillsMatrixes()">
+    <tr class="skills-matrix-title">
+      <div>{{getName(matrix['id'])}}</div>
     </tr>
-    <table class="lineItemTable" *ngFor="let lineItem of getLineItemsByTopic(topic)">
-      <tr class="skills-matrix-line-item-level-header" [ngStyle]="{'background-color':getLineItemBackgroundColor(lineItem)}" (click)="onLineItemNameClick(lineItem)">
-        <td colspan="9">{{lineItem.name}}</td>
+    <tr class="skills-matrix-color-meaning-string">
+      <div>{{getColorMeaningString()}}</div>
+    </tr>
+    <tr *ngIf="isButtonBarShowing()">
+      <div class="buttonBarDiv">
+        <button (click)="onTopicsOnlyBtnClick()" [disabled]="!isCollapseToTopicsBtnEnabled()">Collapse To Topics</button> |
+        <button (click)="onTopicsAndHeadersBtnClick()" [disabled]="!isCollapsToTopicsAndLineItemsBtnEnabled()">Collapse To Line Items</button> |
+        <button (click)="onTopicsHeadersAndDetailBtnClick()" [disabled]="!isFullDetailBtnEnabled()">Full Detail</button> ||
+        <button (click)="onExpandTopicBtnClick()" [disabled]="!isExpandCollapseTopicBtnEnabled()">{{getExpandCollapseTopicBtnText()}}</button> |
+        <button (click)="onExpandLineItemBtnClick()" [disabled]="!isExpandCollapseLineItemBtnEnabled()">{{getExpandCollapseLineItemBtnText()}}</button>
+      </div>
+    </tr>
+    <table class="skills-matrix-topic-level" *ngFor="let topic of getTopics(matrix['id'])">
+      <tr class="skills-matrix-topic" [ngStyle]="{'background-color':getTopicBackgroundColor(topic)}" (click)="onTopicNameClick(topic)">
+        <div>{{topic.name}}</div>
       </tr>
-      <tr class="skills-matrix-line-item-level" *ngIf="isFullDetailShowing(lineItem)">
-        <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 1)}" (click)="onLxClick(lineItem, 1)">
-          <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 1).slice(0,3); let i = index">
-            <div [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}">{{skill.description}}<br/></div>
-          </div>
-        </td>
-        <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 2)}" (click)="onLxClick(lineItem, 2)">
-          <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 2).slice(0,3); let i = index">
-            <div [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}">{{skill.description}}<br/></div>
-          </div>
-        </td>
-        <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 3)}" (click)="onLxClick(lineItem, 3)">
-          <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 3).slice(0,3); let i = index">
-            <div class="skills-matrix-skill" [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}">{{skill.description}}<br/></div>
-          </div>
-        </td>
-        <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 4)}" (click)="onLxClick(lineItem, 4)">
-          <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 4).slice(0,3); let i = index">
-            <div [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}">{{skill.description}}<br/></div>
-          </div>
-        </td>
-      </tr>
+      <table class="lineItemTable" *ngFor="let lineItem of getLineItemsByTopic(topic)">
+        <tr class="skills-matrix-line-item-level-header" [ngStyle]="{'background-color':getLineItemBackgroundColor(lineItem)}" (click)="onLineItemNameClick(lineItem)">
+          <td colspan="9">{{lineItem.name}}</td>
+        </tr>
+        <tr class="skills-matrix-line-item-level" *ngIf="isFullDetailShowing(lineItem)">
+          <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 1)}" (click)="onLxClick(lineItem, 1)">
+            <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 1).slice(0,3); let i = index">
+              <div [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}">{{skill.description}}<br/></div>
+            </div>
+          </td>
+          <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 2)}" (click)="onLxClick(lineItem, 2)">
+            <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 2).slice(0,3); let i = index">
+              <div [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}">{{skill.description}}<br/></div>
+            </div>
+          </td>
+          <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 3)}" (click)="onLxClick(lineItem, 3)">
+            <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 3).slice(0,3); let i = index">
+              <div class="skills-matrix-skill" [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}">{{skill.description}}<br/></div>
+            </div>
+          </td>
+          <td [ngStyle]="{'background-color':getBackgroundColor(lineItem, 4)}" (click)="onLxClick(lineItem, 4)">
+            <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkills(lineItem, 4).slice(0,3); let i = index">
+              <div [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}">{{skill.description}}<br/></div>
+            </div>
+          </td>
+        </tr>
+      </table>
     </table>
   </table>
-</table>
+</div>
 
 <div *ngIf="!_controller"> Not available! </div>

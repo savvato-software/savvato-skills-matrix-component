@@ -69,9 +69,12 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
           If the view is read-only, as in any case that doesn't edit the skillsmatrix, then
           you don't need to supply a skillsMatrixModelService. In that case, the component
-          will use its own default service. This keeps the client code simpler. You will need to
-          supply an environment object, as the component will make a backend call, and needs to
-          know which url to hit.
+          will use its own default service. This keeps the client code simpler.
+
+          If you are in display mode, the controller you provide will need to define a getEnv()
+          function. This is because display mode ignores whatever skillsMatrixModelService you set,
+          using instead a default instance. Along the way it needs to make an API call, so it
+          needs that environment information.
         */
 
         let skillsMatrixId: string = ctrl.getSkillsMatrixId();
@@ -87,11 +90,14 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
         self.smmsvc.waitingPromise().then(() => {
 
             let defaultController = {
-                getName: (skillsMatrixId) => {
-                  return self.smmsvc.getName();
+                getName: (skillsMatrixId: string) => {
+                  return self.smmsvc.getName(skillsMatrixId);
                 },
-                getTopics: () => {
-                  return self.smmsvc.getTopics();
+                getMatrixes: () => {
+                  return self.smmsvc.getMatrixes()
+                },
+                getTopics: (skillsMatrixId: string) => {
+                  return self.smmsvc.getTopics(skillsMatrixId);
                 },
                 getLineItemsByTopic: (topic: any) => {
                   return self.smmsvc.getLineItemsForATopic(topic['id']);
@@ -259,17 +265,25 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     }
   }
 
-  getName() {
+  getName(skillsMatrixId: string) {
     if (this._controller && this._controller["getName"]) {
-      return this._controller["getName"]();
+      return this._controller["getName"](skillsMatrixId);
     } else {
       return "";
     }
   }
 
- getTopics() {
+  getSkillsMatrixes() {
+    if (this._controller && this._controller["getSkillsMatrixes"]) {
+      return this._controller["getSkillsMatrixes"]();
+    } else {
+      return [ ];
+    }
+  }
+
+ getTopics(skillsMatrixId: string) {
     if (this._controller && this._controller["getTopics"]) {
-      return this._controller["getTopics"]();
+      return this._controller["getTopics"](skillsMatrixId);
     } else {
       return [ ];
     }
