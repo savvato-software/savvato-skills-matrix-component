@@ -93,8 +93,8 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                 getName: (skillsMatrixId: string) => {
                   return self.smmsvc.getName(skillsMatrixId);
                 },
-                getMatrixes: () => {
-                  return self.smmsvc.getMatrixes()
+                getSkillsMatrixes: () => {
+                  return self.smmsvc.getSkillsMatrixes();
                 },
                 getTopics: (skillsMatrixId: string) => {
                   return self.smmsvc.getTopics(skillsMatrixId);
