@@ -103,7 +103,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                   return self.smmsvc.getLineItemsForATopic(topic['id']);
                 },
                 getSkillsByLineItemAndLevel: (lineItem: any, level: number) => {
-                  return self.smmsvc.getSkillsForALineItemAndLevel(lineItem['id'], level);
+                  return self.smmsvc.getSkillsForALineItemAndLevel(lineItem, level);
                 },
                 _onTopicClick: (topic: any) => {
                   let thisId = topic['id'];
