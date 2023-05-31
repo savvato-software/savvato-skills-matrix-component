@@ -224,7 +224,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
   private initModelForEditing(self: this, ctrl: any) {
     // write capable view, supplies its own skillsmatrixservice
     self.smmsvc = ctrl.getSkillsMatrixModelService();
-    self.smmsvc._initAll(ctrl.getAllSkillsMatrixIds(), true /* force init */);
+    self.smmsvc._initAll(true /* force init */);
 
     // set a callback to be called when skills matrix has changed (for instance, a line item deleted or added)
     self.smmsvc.setResetCalculatedStuffCallback(() => {
