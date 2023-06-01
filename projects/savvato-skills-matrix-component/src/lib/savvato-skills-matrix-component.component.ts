@@ -77,34 +77,20 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
           needs that environment information.
         */
 
-        let skillsMatrixId: string = ctrl.getSkillsMatrixId();
+        // let skillsMatrixId: string = ctrl.getSkillsMatrixId();
 
-        if (skillsMatrixId === undefined || skillsMatrixId === null || skillsMatrixId === "" || skillsMatrixId.length !== 12)
-          throw new Error("The skillsMatrixId provided by the controllers getSkillsMatrixId() method was invalid.");
+        // if (skillsMatrixId === undefined || skillsMatrixId === null || skillsMatrixId === "" || skillsMatrixId.length !== 12)
+        //   throw new Error("The skillsMatrixId provided by the controllers getSkillsMatrixId() method was invalid.");
 
-        (ctrl.isEditor && ctrl.isEditor()) ?
-          this.initModelForEditing(self, ctrl)
-          : this.initModelForDisplaying(self, ctrl);
+        // (ctrl.isEditor && ctrl.isEditor()) ?
+        //   this.initModelForEditing(self, ctrl)
+        //   : this.initModelForDisplaying(self, ctrl);
 
         // wait for the skills matrix service to load, then.....
-        self.smmsvc.waitingPromise().then(() => {
+        // self.smmsvc.waitingPromise().then(() => {
+        ctrl.initModelService().then(() => {
 
             let defaultController = {
-                getName: (skillsMatrixId: string) => {
-                  return self.smmsvc.getName(skillsMatrixId);
-                },
-                getSkillsMatrixes: () => {
-                  return self.smmsvc.getSkillsMatrixes();
-                },
-                getTopics: (skillsMatrixId: string) => {
-                  return self.smmsvc.getTopics(skillsMatrixId);
-                },
-                getLineItemsByTopic: (topic: any) => {
-                  return self.smmsvc.getLineItemsForATopic(topic['id']);
-                },
-                getSkillsByLineItemAndLevel: (lineItem: any, level: number) => {
-                  return self.smmsvc.getSkillsForALineItemAndLevel(lineItem, level);
-                },
                 _onTopicClick: (topic: any) => {
                   let thisId = topic['id'];
                   let isSelected = undefined;
@@ -191,6 +177,25 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
             self._controller = { ...defaultController, ...ctrl };
 
+            if (self._controller["isEditor"] && self._controller["isEditor"]()) {
+              self._controller["setResetCalculatedStuffCallback"](() => {
+                // throw error
+                throw new Error("The skillsmatrix.component is not yet able to handle the resetCalculatedStuff callback.");
+
+                // let skillsMatrix = self.smmsvc.getModel();
+
+                // if (skillsMatrix) {
+                  // get all getLineItems
+                  // let allLineItemIds: any = jp.query(skillsMatrix, "$..lineItems");
+                  // allLineItemIds = allLineItemIds.flat();
+                  // allLineItemIds = allLineItemIds.map((li: any) => li['id']);
+
+                  // if there is any selected line item id, which does not appear in the list of all line items, remove it
+                  // self.selectedLineItemIDs = self.selectedLineItemIDs.filter(id => allLineItemIds.includes(id))
+                // }
+              })
+            }
+
             // handle inits and provider funcs for the client..
             if ( self._controller["setProviderForSelectedTopicIDs"]) {
               self._controller["setProviderForSelectedTopicIDs"](() => {
@@ -221,41 +226,42 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
       });
   }
 
-  private initModelForEditing(self: this, ctrl: any) {
+
+  // private initModelForEditing(self: this, ctrl: any) {
     // write capable view, supplies its own skillsmatrixservice
-    self.smmsvc = ctrl.getSkillsMatrixModelService();
-    self.smmsvc._initAll(true /* force init */);
+    // self.smmsvc = ctrl.getSkillsMatrixModelService();
+    // self.smmsvc._initAll(true /* force init */);
 
     // set a callback to be called when skills matrix has changed (for instance, a line item deleted or added)
-    self.smmsvc.setResetCalculatedStuffCallback(() => {
-      let skillsMatrix = self.smmsvc.getModel();
+    // self.smmsvc.setResetCalculatedStuffCallback(() => {
+    //   let skillsMatrix = self.smmsvc.getModel();
 
-      if (skillsMatrix) {
+      // if (skillsMatrix) {
         // get all getLineItems
-        let allLineItemIds: any = jp.query(skillsMatrix, "$..lineItems");
-        allLineItemIds = allLineItemIds.flat();
-        allLineItemIds = allLineItemIds.map((li: any) => li['id']);
+        // let allLineItemIds: any = jp.query(skillsMatrix, "$..lineItems");
+        // allLineItemIds = allLineItemIds.flat();
+        // allLineItemIds = allLineItemIds.map((li: any) => li['id']);
 
         // if there is any selected line item id, which does not appear in the list of all line items, remove it
-        self.selectedLineItemIDs = self.selectedLineItemIDs.filter(id => allLineItemIds.includes(id))
-      }
-    })
-  }
+        // self.selectedLineItemIDs = self.selectedLineItemIDs.filter(id => allLineItemIds.includes(id))
+      // }
+    // })
+  // }
 
-  private initModelForDisplaying(self: this, ctrl: any) {
+  // private initModelForDisplaying(self: this, ctrl: any) {
     // read only view
-    self.smmsvc = self.defaultSMMSvc;
+    // self.smmsvc = self.defaultSMMSvc;
 
-    self.smmsvc.setEnvironment(ctrl.getEnv());
-    self.smmsvc._init(ctrl.getSkillsMatrixId(), true);
+    // self.smmsvc.setEnvironment(ctrl.getEnv());
+    // self.smmsvc._init(ctrl.getSkillsMatrixId(), true);
 
-    if (ctrl.setRefreshFunc) {
+    // if (ctrl.setRefreshFunc) {
       // pass a function back to the client, one that it can call to let us know to refresh our data
-      ctrl.setRefreshFunc(() => {
-        self.smmsvc.waitingPromise().then(() => self.smmsvc._initWithSameSkillsMatrixID(true));
-      })
-    }
-  }
+      // ctrl.setRefreshFunc(() => {
+      //   self.smmsvc.waitingPromise().then(() => self.smmsvc._initWithSameSkillsMatrixID(true));
+      // })
+    // }
+  // }
 
   isButtonBarShowing() {
     if (this._controller && this._controller["isButtonBarShowing"]) {
@@ -269,6 +275,8 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     if (this._controller && this._controller["getName"]) {
       return this._controller["getName"](skillsMatrixId);
     } else {
+      throw new Error("The skillsmatrix controller has not implemented a required method: getName().");
+
       return "";
     }
   }
@@ -277,6 +285,8 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     if (this._controller && this._controller["getSkillsMatrixes"]) {
       return this._controller["getSkillsMatrixes"]();
     } else {
+      throw new Error("The skillsmatrix controller has not implemented a required method: getSkillsMatrixes().");
+
       return [ ];
     }
   }
@@ -285,15 +295,21 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     if (this._controller && this._controller["getTopics"]) {
       return this._controller["getTopics"](skillsMatrixId);
     } else {
+      throw new Error("The skillsmatrix controller has not implemented a required method: getTopics().");
+
       return [ ];
     }
   }
 
   getLineItemsByTopic(topic: any) {
-    if (this._controller && this.areLineItemHeadersShowing(topic) && this._controller["getLineItemsByTopic"]) {
-      return this._controller["getLineItemsByTopic"](topic);
-    } else {
-      return [ ];
+    if (this.areLineItemHeadersShowing(topic)) {
+      if (this._controller && this._controller["getLineItemsByTopic"]) {
+        return this._controller["getLineItemsByTopic"](topic);
+      } else {
+        throw new Error("The skillsmatrix controller has not implemented a required method: getLineItemsByTopic().");
+
+        return [];
+      }
     }
   }
 
@@ -301,6 +317,8 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     if (this._controller && this._controller["getSkillsByLineItemAndLevel"]) {
       return this._controller["getSkillsByLineItemAndLevel"](lineItem, level);
     } else {
+      throw new Error("The skillsmatrix controller has not implemented a required method: getSkillsByLineItemAndLevel().");
+
       return [ ];
     }
   }
