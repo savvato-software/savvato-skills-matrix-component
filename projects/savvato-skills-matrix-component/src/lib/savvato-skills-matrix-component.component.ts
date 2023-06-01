@@ -178,6 +178,9 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
             self._controller = { ...defaultController, ...ctrl };
 
             if (self._controller["isEditor"] && self._controller["isEditor"]()) {
+              if (!self._controller["setResetCalculatedStuffCallback"])
+                throw new Error("This is an editor, but the controller does not implement the setResetCalculatedStuffCallback method.");
+
               self._controller["setResetCalculatedStuffCallback"](() => {
                 // throw error
                 throw new Error("The skillsmatrix.component is not yet able to handle the resetCalculatedStuff callback.");
