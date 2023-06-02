@@ -39,6 +39,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
   selectedTopicIDs: Array<string> = [];
   selectedLineItemIDs: Array<string> = [];
   selectedSkillLevel: number = -1;
+  selectedSkillIDs: Array<string> = [];
 
   expandedTopicIDs: Array<string> = [];
   expandedLineItemIDs: Array<string> = [];
@@ -133,7 +134,35 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                   }
 
                   return isSelected;
+                },
+                _onSkillClick: (skill: any) => {
+                  let isSelected = false;
+                  if (self.selectedSkillIDs.length === 0) {
+                    self.selectedSkillIDs.push(skill['id']);
+                    isSelected = true;
+                  } else {
+                    if (self.allowMultiSelect) {
+                      if (self.selectedSkillIDs.includes(skill['id'])) {
+                        self.selectedSkillIDs = self.selectedSkillIDs.filter((thatId) => { return skill['id'] !== thatId; })
+                        isSelected = false;
+                      } else {
+                        self.selectedSkillIDs.push(skill['id']);
+                        isSelected = true;
+                      }
+                    } else {
+                      if (self.selectedSkillIDs[0] === skill['id']) {
+                        self.selectedSkillIDs = [];
+                        isSelected = false;
+                      } else {
+                        self.selectedSkillIDs[0] = skill['id'];
+                        isSelected = true;
+                      }
+                    }
+                  }
+
+                  return isSelected;
                 }
+
             }
 
             self._controller = { ...defaultController, ...ctrl };
@@ -183,6 +212,14 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
       return this._controller["isButtonBarShowing"]()
     } else {
       return true;
+    }
+  }
+
+  isIndividualSkillSelectionAllowed() {
+    if (this._controller && this._controller["isIndividualSkillSelectionAllowed"]) {
+      return this._controller["isIndividualSkillSelectionAllowed"]()
+    } else {
+      return false;
     }
   }
 
@@ -238,6 +275,14 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     }
   }
 
+  getSkillsShortList(lineItem: any, level: number) {
+    if (this._controller && this._controller["getSkillsShortListByLineItemAndLevel"]) {
+      return this._controller["getSkillsShortListByLineItemAndLevel"](lineItem, level);
+    } else {
+      return this.getSkills(lineItem, level).slice(0, 3);
+    }
+  }
+
   getBackgroundColor(lineItem: any, idx: number) {
     if (this._controller && this._controller["getBackgroundColor"]) {
       return this._controller["getBackgroundColor"](lineItem, idx);
@@ -256,10 +301,14 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
   getSkillBackgroundColor(lineItem: any, skill: any, index: number) {
     if (this._controller && this._controller["getSkillBackgroundColor"]) {
-      const isLineItemSelected = this.selectedLineItemIDs.includes(lineItem['id']);
-      const isThisSkillsLevelSelected = this.selectedSkillLevel === skill["level"];
 
-      return this._controller["getSkillBackgroundColor"](lineItem, skill, index, isLineItemSelected && isThisSkillsLevelSelected);
+      if (this.isIndividualSkillSelectionAllowed()) {
+        return this._controller["getSkillBackgroundColor"](lineItem, skill, index, this.selectedSkillIDs.includes(skill['id']));
+      } else {
+        const isLineItemSelected = this.selectedLineItemIDs.includes(lineItem['id']);
+        const isThisSkillsLevelSelected = this.selectedSkillLevel === skill["level"];
+        return this._controller["getSkillBackgroundColor"](lineItem, skill, index, isLineItemSelected && isThisSkillsLevelSelected);
+      }
     } else {
       if (index % 2 == 0)
         return "white";
@@ -281,6 +330,16 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
       return this._controller["getTopicBackgroundColor"](topic, this.selectedTopicIDs.includes(topic['id']), !this.areLineItemHeadersShowing(topic));
     } else {
       return undefined; // use default color defined in our css
+    }
+  }
+
+  onSkillClick(matrix: any, topic: any, lineItem: any, skill: any) {
+    if (this._controller && this._controller["_onSkillClick"]) {
+      let isSelected = this._controller["_onSkillClick"](skill);
+
+      if (this._controller && this._controller["onSkillClick"]) {
+        this._controller["onSkillClick"](matrix, topic, lineItem, skill, isSelected);
+      }
     }
   }
 
