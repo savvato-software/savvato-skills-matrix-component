@@ -299,6 +299,17 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     }
   }
 
+  getSkillBorderStyle(skill: any) {
+    if (this.isIndividualSkillSelectionAllowed()) {
+      if (this._controller && this._controller["getSkillBorderStyle"])
+        return this._controller["getSkillBorderStyle"](skill, this.selectedSkillIDs.includes(skill['id']));
+      else if (this.selectedSkillIDs.includes(skill['id']))
+        return "dashed";
+    }
+
+    return "";
+  }
+
   getSkillBackgroundColor(lineItem: any, skill: any, index: number) {
     if (this._controller && this._controller["getSkillBackgroundColor"]) {
 
