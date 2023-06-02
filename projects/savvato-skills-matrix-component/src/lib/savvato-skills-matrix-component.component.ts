@@ -194,12 +194,6 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
               })
             }
 
-            // Note, no need for a setProviderForSelectedSkillIDs because
-            //  you can't select individual skills from the component. You
-            //  select a skill level, and then the page doing the selecting
-            //  will have a means of editing the skills that apply to that
-            //  level. Eventually, skill level selection will happen, I'm sure.
-
             if ( self._controller["skillsMatrixComponentFinishedLoadingEventHandler"]) {
               self._controller["skillsMatrixComponentFinishedLoadingEventHandler"](true);
             }
