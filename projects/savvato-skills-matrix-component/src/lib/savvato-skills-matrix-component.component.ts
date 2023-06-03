@@ -36,6 +36,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
   _controller: any = undefined;
 
+  selectedMatrixIDs: Array<string> = [];
   selectedTopicIDs: Array<string> = [];
   selectedLineItemIDs: Array<string> = [];
   selectedSkillLevel: number = -1;
@@ -135,7 +136,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
                   return isSelected;
                 },
-                _onSkillClick: (skill: any) => {
+                _onSkillClick: (matrix: any, topic: any, lineItem: any, skill: any) => {
                   let isSelected = false;
                   if (self.selectedSkillIDs.length === 0) {
                     self.selectedSkillIDs.push(skill['id']);
@@ -160,6 +161,11 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
                     }
                   }
 
+                  self.selectedMatrixIDs = [matrix['id']];
+                  self.selectedTopicIDs = [topic['id']];
+                  self.selectedLineItemIDs = [lineItem['id']];
+                  self.selectedSkillLevel = -1;
+
                   return isSelected;
                 }
 
@@ -178,11 +184,16 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
             }
 
             // handle inits and provider funcs for the client..
-            if ( self._controller["setProviderForSelectedTopicIDs"]) {
-              self._controller["setProviderForSelectedTopicIDs"](() => {
-                return self.selectedTopicIDs.slice(0) // return a copy of the array
-              });
-            }
+          if ( self._controller["setProviderForSelectedMatrixIDs"]) {
+            self._controller["setProviderForSelectedMatrixIDs"](() => {
+              return self.selectedMatrixIDs.slice(0) // return a copy of the array
+            });
+          }
+          if ( self._controller["setProviderForSelectedTopicIDs"]) {
+            self._controller["setProviderForSelectedTopicIDs"](() => {
+              return self.selectedTopicIDs.slice(0) // return a copy of the array
+            });
+          }
             if ( self._controller["setProviderForSelectedLineItemIDs"]) {
               self._controller["setProviderForSelectedLineItemIDs"](() => {
                 return self.selectedLineItemIDs.slice(0) // return a copy of the array
@@ -191,6 +202,11 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
             if ( self._controller["setProviderForSelectedLevelID"]) {
               self._controller["setProviderForSelectedLevelID"](() => {
                 return self.selectedSkillLevel;
+              })
+            }
+            if ( self._controller["setProviderForSelectedSkillIDs"]) {
+              self._controller["setProviderForSelectedSkillIDs"](() => {
+                return self.selectedSkillIDs.slice(0) // return a copy of the array;
               })
             }
 
@@ -340,7 +356,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
 
   onSkillClick(matrix: any, topic: any, lineItem: any, skill: any) {
     if (this._controller && this._controller["_onSkillClick"]) {
-      let isSelected = this._controller["_onSkillClick"](skill);
+      let isSelected = this._controller["_onSkillClick"](matrix, topic, lineItem, skill);
 
       if (this._controller && this._controller["onSkillClick"]) {
         this._controller["onSkillClick"](matrix, topic, lineItem, skill, isSelected);
