@@ -13,6 +13,8 @@
         <button (click)="onTopicsHeadersAndDetailBtnClick()" [disabled]="!isFullDetailBtnEnabled()">Full Detail</button> ||
         <button (click)="onExpandTopicBtnClick()" [disabled]="!isExpandCollapseTopicBtnEnabled()">{{getExpandCollapseTopicBtnText()}}</button> |
         <button (click)="onExpandLineItemBtnClick()" [disabled]="!isExpandCollapseLineItemBtnEnabled()">{{getExpandCollapseLineItemBtnText()}}</button>
+        <span *ngIf="hasCustomButtons()"> | </span>
+        <button *ngFor="let btn of getCustomButtons()" [ngStyle]="{'color':getCustomButtonColor(btn)}" (click)="onCustomButtonClick(btn)" [disabled]="isCustomButtonDisabled(btn)">{{btn.text()}} | </button>
       </div>
     </tr>
     <table class="skills-matrix-topic-level" *ngFor="let topic of getTopics(matrix['id'])">

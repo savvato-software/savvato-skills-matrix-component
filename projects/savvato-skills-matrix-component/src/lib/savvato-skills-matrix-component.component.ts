@@ -233,6 +233,30 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     }
   }
 
+  hasCustomButtons() {
+    return this._controller && this._controller["getCustomButtons"] && this._controller["getCustomButtons"]().length > 0;
+  }
+
+  getCustomButtons() {
+    if (this._controller && this._controller["getCustomButtons"]) {
+      return this._controller["getCustomButtons"]()['buttons'];
+    } else {
+      return [];
+    }
+  }
+
+  onCustomButtonClick(button: any) {
+    button['handler']();
+  }
+
+  isCustomButtonDisabled(btn: any) {
+    return btn['isDisabled']();
+  }
+
+  getCustomButtonColor(btn: any) {
+    return btn['color']();
+  }
+
   getName(skillsMatrixId: string) {
     if (this._controller && this._controller["getName"]) {
       return this._controller["getName"](skillsMatrixId);
