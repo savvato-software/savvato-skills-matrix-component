@@ -217,6 +217,14 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
       });
   }
 
+  isMatrixTitleShowing() {
+    if (this._controller && this._controller["isMatrixTitleShowing"]) {
+      return this._controller["isMatrixTitleShowing"]()
+    } else {
+      return true;
+    }
+  }
+
   isButtonBarShowing() {
     if (this._controller && this._controller["isButtonBarShowing"]) {
       return this._controller["isButtonBarShowing"]()

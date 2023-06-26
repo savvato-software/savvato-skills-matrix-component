@@ -1,6 +1,6 @@
 <div *ngIf="_controller">
   <table class="skills-matrix-table" *ngFor="let matrix of getSkillsMatrixes()" [attr.data-matrix-id]="matrix.id">
-    <tr class="skills-matrix-title">
+    <tr class="skills-matrix-title" *ngIf="isMatrixTitleShowing()">
       <div>{{getName(matrix['id'])}}</div>
     </tr>
     <tr class="skills-matrix-color-meaning-string">
