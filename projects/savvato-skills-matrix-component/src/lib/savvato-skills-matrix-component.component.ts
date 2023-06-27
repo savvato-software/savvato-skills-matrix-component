@@ -464,7 +464,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     return this.collapseToState != this._STATE_TOPICS_ONLY;
   }
 
-  isCollapsToTopicsAndLineItemsBtnEnabled() {
+  isCollapseToTopicsAndLineItemsBtnEnabled() {
     return this.collapseToState != this._STATE_TOPICS_HEADERS;
   }
 

@@ -9,7 +9,7 @@
     <tr *ngIf="isButtonBarShowing()">
       <div class="buttonBarDiv">
         <button (click)="onTopicsOnlyBtnClick()" [disabled]="!isCollapseToTopicsBtnEnabled()">Collapse To Topics</button> |
-        <button (click)="onTopicsAndHeadersBtnClick()" [disabled]="!isCollapsToTopicsAndLineItemsBtnEnabled()">Collapse To Line Items</button> |
+        <button (click)="onTopicsAndHeadersBtnClick()" [disabled]="!isCollapseToTopicsAndLineItemsBtnEnabled()">Collapse To Line Items</button> |
         <button (click)="onTopicsHeadersAndDetailBtnClick()" [disabled]="!isFullDetailBtnEnabled()">Full Detail</button> ||
         <button (click)="onExpandTopicBtnClick()" [disabled]="!isExpandCollapseTopicBtnEnabled()">{{getExpandCollapseTopicBtnText()}}</button> |
         <button (click)="onExpandLineItemBtnClick()" [disabled]="!isExpandCollapseLineItemBtnEnabled()">{{getExpandCollapseLineItemBtnText()}}</button>
