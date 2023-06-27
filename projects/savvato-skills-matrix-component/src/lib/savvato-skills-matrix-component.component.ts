@@ -1,4 +1,14 @@
-import { Component, OnInit, Injectable, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  Injectable,
+  Input,
+  ViewContainerRef,
+  ViewChild,
+  ComponentFactoryResolver,
+  TemplateRef
+} from '@angular/core';
 
 // This component presents a view of the skills matrix.
 //
@@ -34,6 +44,8 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
   @Input() ctrl: any;
   @Input() allowMultiSelect: boolean = false;
 
+  @Input() contextMenuContent!: TemplateRef<any>; // The component type to be passed from the host
+
   _controller: any = undefined;
 
   selectedMatrixIDs: Array<string> = [];
@@ -48,7 +60,7 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    let self = this;
+    const self = this;
     self.ctrl.then((ctrl: any) => {
 
         ctrl.initModelService().then(() => {
