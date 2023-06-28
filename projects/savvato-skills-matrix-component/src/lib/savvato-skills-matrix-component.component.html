@@ -3,7 +3,7 @@
     <tr class="skills-matrix-title" *ngIf="isMatrixTitleShowing()">
       <div>{{getName(matrix['id'])}}</div>
     </tr>
-    <tr class="skills-matrix-color-meaning-string">
+    <tr *ngIf="isColorMeaningStringShowing()" class="skills-matrix-color-meaning-string">
       <div>{{getColorMeaningString()}}</div>
     </tr>
     <tr *ngIf="isButtonBarShowing()">
@@ -27,46 +27,46 @@
         </tr>
         <tr class="skills-matrix-line-item-level" *ngIf="isFullDetailShowing(lineItem)">
           <td *ngIf="isIndividualSkillSelectionAllowed()" [ngStyle]="{'background-color':getBackgroundColor(lineItem, 1)}">
-            <div class="skills-matrix-line-item-level-element" [cdkContextMenuTriggerFor]="context_menu" *ngFor="let skill of getSkillsShortList(lineItem, 1); let i = index">
-              <div [ngStyle]="{'border-style':getSkillBorderStyle(skill),'background-color':getSkillBackgroundColor(lineItem, skill, i)}" (click)="onSkillClick(matrix, topic, lineItem, skill)" [attr.data-skill-id]="skill.id">{{skill.description}}<br/></div>
+            <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkillsShortList(lineItem, 1); let i = index">
+              <div [cdkContextMenuTriggerFor]="context_menu" [ngStyle]="{'border-style':getSkillBorderStyle(skill),'background-color':getSkillBackgroundColor(lineItem, skill, i)}" (click)="onSkillClick(matrix, topic, lineItem, skill)" [attr.data-skill-id]="skill.id" (cdkContextMenuOpened)=" onCDKContextMenuOpened(matrix, topic, lineItem, skill)" (cdkContextMenuClosed)="onCDKContextMenuClosed()" [cdkContextMenuDisabled]="!isCDKContextMenuEnabled(matrix, topic, lineItem, skill)" >{{skill.description}}<br/></div>
             </div>
           </td>
           <td *ngIf="!isIndividualSkillSelectionAllowed()" [ngStyle]="{'background-color':getBackgroundColor(lineItem, 1)}" (click)="onLxClick(lineItem, 1)">
-            <div class="skills-matrix-line-item-level-element" [cdkContextMenuTriggerFor]="context_menu" *ngFor="let skill of getSkillsShortList(lineItem, 1); let i = index">
-              <div [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}" [attr.data-skill-id]="skill.id">{{skill.description}}<br/></div>
+            <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkillsShortList(lineItem, 1); let i = index">
+              <div [cdkContextMenuTriggerFor]="context_menu" [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}" [attr.data-skill-id]="skill.id" (cdkContextMenuOpened)=" onCDKContextMenuOpened(matrix, topic, lineItem, skill)" (cdkContextMenuClosed)="onCDKContextMenuClosed()" [cdkContextMenuDisabled]="!isCDKContextMenuEnabled(matrix, topic, lineItem, skill)" >{{skill.description}}<br/></div>
             </div>
           </td>
 
           <td *ngIf="isIndividualSkillSelectionAllowed()" [ngStyle]="{'background-color':getBackgroundColor(lineItem, 2)}">
-            <div class="skills-matrix-line-item-level-element" [cdkContextMenuTriggerFor]="context_menu" *ngFor="let skill of getSkillsShortList(lineItem, 2); let i = index">
-              <div [ngStyle]="{'border-style':getSkillBorderStyle(skill),'background-color':getSkillBackgroundColor(lineItem, skill, i)}" (click)="onSkillClick(matrix, topic, lineItem, skill)" [attr.data-skill-id]="skill.id">{{skill.description}}<br/></div>
+            <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkillsShortList(lineItem, 2); let i = index">
+              <div [cdkContextMenuTriggerFor]="context_menu" [ngStyle]="{'border-style':getSkillBorderStyle(skill),'background-color':getSkillBackgroundColor(lineItem, skill, i)}" (click)="onSkillClick(matrix, topic, lineItem, skill)" [attr.data-skill-id]="skill.id" (cdkContextMenuOpened)=" onCDKContextMenuOpened(matrix, topic, lineItem, skill)" (cdkContextMenuClosed)="onCDKContextMenuClosed()" [cdkContextMenuDisabled]="!isCDKContextMenuEnabled(matrix, topic, lineItem, skill)" >{{skill.description}}<br/></div>
             </div>
           </td>
           <td *ngIf="!isIndividualSkillSelectionAllowed()" [ngStyle]="{'background-color':getBackgroundColor(lineItem, 2)}" (click)="onLxClick(lineItem, 2)">
-            <div class="skills-matrix-line-item-level-element" [cdkContextMenuTriggerFor]="context_menu" *ngFor="let skill of getSkillsShortList(lineItem, 2); let i = index">
-              <div [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}" [attr.data-skill-id]="skill.id">{{skill.description}}<br/></div>
+            <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkillsShortList(lineItem, 2); let i = index">
+              <div [cdkContextMenuTriggerFor]="context_menu" [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}" [attr.data-skill-id]="skill.id" (cdkContextMenuOpened)=" onCDKContextMenuOpened(matrix, topic, lineItem, skill)" (cdkContextMenuClosed)="onCDKContextMenuClosed()" [cdkContextMenuDisabled]="!isCDKContextMenuEnabled(matrix, topic, lineItem, skill)" >{{skill.description}}<br/></div>
             </div>
           </td>
 
           <td *ngIf="isIndividualSkillSelectionAllowed()" [ngStyle]="{'background-color':getBackgroundColor(lineItem, 3)}">
-            <div class="skills-matrix-line-item-level-element" [cdkContextMenuTriggerFor]="context_menu" *ngFor="let skill of getSkillsShortList(lineItem, 3); let i = index">
-              <div [ngStyle]="{'border-style':getSkillBorderStyle(skill),'background-color':getSkillBackgroundColor(lineItem, skill, i)}" (click)="onSkillClick(matrix, topic, lineItem, skill)" [attr.data-skill-id]="skill.id">{{skill.description}}<br/></div>
+            <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkillsShortList(lineItem, 3); let i = index">
+              <div [cdkContextMenuTriggerFor]="context_menu" [ngStyle]="{'border-style':getSkillBorderStyle(skill),'background-color':getSkillBackgroundColor(lineItem, skill, i)}" (click)="onSkillClick(matrix, topic, lineItem, skill)" [attr.data-skill-id]="skill.id" (cdkContextMenuOpened)=" onCDKContextMenuOpened(matrix, topic, lineItem, skill)" (cdkContextMenuClosed)="onCDKContextMenuClosed()" [cdkContextMenuDisabled]="!isCDKContextMenuEnabled(matrix, topic, lineItem, skill)" >{{skill.description}}<br/></div>
             </div>
           </td>
           <td *ngIf="!isIndividualSkillSelectionAllowed()" [ngStyle]="{'background-color':getBackgroundColor(lineItem, 3)}" (click)="onLxClick(lineItem, 3)">
-            <div class="skills-matrix-line-item-level-element" [cdkContextMenuTriggerFor]="context_menu" *ngFor="let skill of getSkillsShortList(lineItem, 3); let i = index">
-              <div [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}" [attr.data-skill-id]="skill.id">{{skill.description}}<br/></div>
+            <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkillsShortList(lineItem, 3); let i = index">
+              <div [cdkContextMenuTriggerFor]="context_menu" [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}" [attr.data-skill-id]="skill.id" (cdkContextMenuOpened)=" onCDKContextMenuOpened(matrix, topic, lineItem, skill)" (cdkContextMenuClosed)="onCDKContextMenuClosed()" [cdkContextMenuDisabled]="!isCDKContextMenuEnabled(matrix, topic, lineItem, skill)" >{{skill.description}}<br/></div>
             </div>
           </td>
 
           <td *ngIf="isIndividualSkillSelectionAllowed()" [ngStyle]="{'background-color':getBackgroundColor(lineItem, 4)}">
-            <div class="skills-matrix-line-item-level-element" [cdkContextMenuTriggerFor]="context_menu" *ngFor="let skill of getSkillsShortList(lineItem, 4); let i = index">
-              <div [ngStyle]="{'border-style':getSkillBorderStyle(skill),'background-color':getSkillBackgroundColor(lineItem, skill, i)}" (click)="onSkillClick(matrix, topic, lineItem, skill)" [attr.data-skill-id]="skill.id">{{skill.description}}<br/></div>
+            <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkillsShortList(lineItem, 4); let i = index">
+              <div [cdkContextMenuTriggerFor]="context_menu" [ngStyle]="{'border-style':getSkillBorderStyle(skill),'background-color':getSkillBackgroundColor(lineItem, skill, i)}" (click)="onSkillClick(matrix, topic, lineItem, skill)" [attr.data-skill-id]="skill.id" (cdkContextMenuOpened)=" onCDKContextMenuOpened(matrix, topic, lineItem, skill)" (cdkContextMenuClosed)="onCDKContextMenuClosed()" [cdkContextMenuDisabled]="!isCDKContextMenuEnabled(matrix, topic, lineItem, skill)" >{{skill.description}}<br/></div>
             </div>
           </td>
           <td *ngIf="!isIndividualSkillSelectionAllowed()" [ngStyle]="{'background-color':getBackgroundColor(lineItem, 4)}" (click)="onLxClick(lineItem, 4)">
-            <div class="skills-matrix-line-item-level-element" [cdkContextMenuTriggerFor]="context_menu" *ngFor="let skill of getSkillsShortList(lineItem, 4); let i = index">
-              <div [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}" [attr.data-skill-id]="skill.id">{{skill.description}}<br/></div>
+            <div class="skills-matrix-line-item-level-element" *ngFor="let skill of getSkillsShortList(lineItem, 4); let i = index">
+              <div [cdkContextMenuTriggerFor]="context_menu" [ngStyle]="{'background-color':getSkillBackgroundColor(lineItem, skill, i)}" [attr.data-skill-id]="skill.id" [cdkContextMenuDisabled]="!isCDKContextMenuEnabled(matrix, topic, lineItem, skill)" >{{skill.description}}<br/></div>
             </div>
           </td>
         </tr>

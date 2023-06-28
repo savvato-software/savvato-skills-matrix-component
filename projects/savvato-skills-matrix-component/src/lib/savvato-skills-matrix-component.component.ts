@@ -7,7 +7,7 @@ import {
   ViewContainerRef,
   ViewChild,
   ComponentFactoryResolver,
-  TemplateRef
+  TemplateRef, Output, EventEmitter, HostListener
 } from '@angular/core';
 
 // This component presents a view of the skills matrix.
@@ -229,6 +229,14 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
       });
   }
 
+  isColorMeaningStringShowing() {
+    if (this._controller && this._controller["isColorMeaningStringShowing"]) {
+      return this._controller["isColorMeaningStringShowing"]()
+    } else {
+      return true;
+    }
+  }
+
   isMatrixTitleShowing() {
     if (this._controller && this._controller["isMatrixTitleShowing"]) {
       return this._controller["isMatrixTitleShowing"]()
@@ -354,12 +362,16 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
   }
 
   getSkillBorderStyle(skill: any) {
-    if (this.isIndividualSkillSelectionAllowed()) {
-      if (this._controller && this._controller["getSkillBorderStyle"])
-        return this._controller["getSkillBorderStyle"](skill, this.selectedSkillIDs.includes(skill['id']));
-      else if (this.selectedSkillIDs.includes(skill['id']))
-        return "dashed";
-    }
+    if (this._controller &&
+      ((this._controller["shouldShowSelectedSkillBorder"] && this._controller["shouldShowSelectedSkillBorder"](skill)) ||
+        (!this._controller["shouldShowSelectedSkillBorder"]))) {
+        if (this.isIndividualSkillSelectionAllowed()) {
+          if (this._controller["getSkillBorderStyle"])
+            return this._controller["getSkillBorderStyle"](skill, this.selectedSkillIDs.includes(skill['id']));
+          else if (this.selectedSkillIDs.includes(skill['id']))
+            return "dashed";
+        }
+      }
 
     return "";
   }
@@ -529,5 +541,28 @@ export class SavvatoSkillsMatrixComponentComponent implements OnInit {
     }
 
     return this.collapseToState === this._STATE_FULL_DETAIL;
+  }
+
+  @Output() contextMenuTriggered: EventEmitter<any> = new EventEmitter<any>();
+
+  onCDKContextMenuOpened(matrix: any, topic: any, lineItem: any, skill: any) {
+    // do nothing
+  }
+
+  isCDKContextMenuEnabled(matrix: any, topic: any, lineItem: any, skill: any) {
+    if (matrix && topic && lineItem && skill) {
+      if (this._controller && this._controller["shouldContextMenuShow"]) {
+        if (this._controller["shouldContextMenuShow"](matrix, topic, lineItem, skill)) {
+          this.contextMenuTriggered.emit({matrix: matrix, topic: topic, lineItem: lineItem, skill: skill});
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  onCDKContextMenuClosed() {
+    // do nothing
   }
 }
